@@ -1,0 +1,155 @@
+<!-- Final version of slider for workshop -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>My First Slider</title>
+
+    <style>
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        overflow: hidden;
+        height: 100vh;
+        width: 100vw;
+        background: gray;
+      }
+
+      #slider_container {
+        position: relative;
+        width: 600px;
+        height: 400px;
+        overflow: hidden;
+        box-shadow: 0px 0px 20px 20px #f0ffff75;
+        border-radius: 4px;
+      }
+
+      #slides_box {
+        position: absolute;
+        top: 0;
+        /* left: 0; */
+        transition: left 0.3s linear;
+        display: flex;
+      }
+
+      img {
+        width: 600px;
+        height: 400px;
+      }
+
+      #btn_prev,
+      #btn_next {
+        position: absolute;
+        bottom: 40%;
+        font-size: 65px;
+        font-weight: 900;
+        color: white;
+        background: transparent;
+        outline: none;
+        border: none;
+        border-radius: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+      }
+
+      #btn_prev:active,
+      #btn_next:active {
+        color: gray;
+      }
+
+      #btn_prev {
+        left: 0;
+      }
+      #btn_next {
+        right: 0;
+      }
+
+      .disabled {
+        pointer-events: none;
+        opacity: 0.5;
+      }
+    </style>
+  </head>
+  <!--  -->
+  <body>
+    <div id="slider_container">
+      <div id="slides_box">
+        <img
+          src="https://cdn.pixabay.com/photo/2015/07/09/22/45/tree-838667__340.jpg"
+        />
+        <img
+          src="https://cdn.pixabay.com/photo/2015/04/23/21/59/tree-736875__340.jpg"
+        />
+        <img
+          src="https://cdn.pixabay.com/photo/2015/06/19/21/24/the-road-815297__340.jpg"
+        />
+        <img
+          src="https://cdn.pixabay.com/photo/2015/10/30/20/13/sunrise-1014712__340.jpg"
+        />
+        <img
+          src="https://cdn.pixabay.com/photo/2014/08/01/00/08/pier-407252__340.jpg"
+        />
+      </div>
+
+      <button id="btn_prev">&lsaquo;</button>
+      <button id="btn_next">&rsaquo;</button>
+    </div>
+
+    <script>
+      let prevBtn = document.getElementById("btn_prev");
+      let nextBtn = document.getElementById("btn_next");
+      let slidesBox = document.getElementById("slides_box");
+
+      const SLIDE_WIDTH = 600;
+      const SLIDES_COUNT = 5;
+      const NEXT_LIMIT = -SLIDE_WIDTH * (SLIDES_COUNT - 1);
+
+      slidesBox.style.left = "0px";
+
+      // reusable func to get current left position of slides box
+      const getSlidesBoxLeftPosition = function() {
+        let leftPosition = parseInt(slidesBox.style.left);
+        return leftPosition;
+      };
+
+      prevBtn.onclick = function() {
+        let currentLeftPosition = getSlidesBoxLeftPosition();
+        if (currentLeftPosition < 0) {
+          let newLeftPosition = currentLeftPosition + SLIDE_WIDTH;
+          slidesBox.style.left = newLeftPosition + "px";
+
+          // bonus - enable/disable buttons
+          if (newLeftPosition === 0) {
+            prevBtn.classList.add("disabled");
+          }
+          if (nextBtn.classList.contains("disabled")) {
+            nextBtn.classList.remove("disabled");
+          }
+        }
+      };
+
+      nextBtn.onclick = function() {
+        let currentLeftPosition = getSlidesBoxLeftPosition();
+        if (currentLeftPosition > NEXT_LIMIT) {
+          let newLeftPosition = currentLeftPosition - SLIDE_WIDTH;
+          slidesBox.style.left = newLeftPosition + "px";
+
+          // bonus - enable/disable buttons
+          if (newLeftPosition === NEXT_LIMIT) {
+            nextBtn.classList.add("disabled");
+          }
+          if (prevBtn.classList.contains("disabled")) {
+            prevBtn.classList.remove("disabled");
+          }
+        }
+      };
+    </script>
+  </body>
+</html>
